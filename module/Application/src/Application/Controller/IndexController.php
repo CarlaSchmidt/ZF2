@@ -9,13 +9,50 @@
 
 namespace Application\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
-class IndexController extends AbstractActionController
+class IndexController extends ActionController
 {
+
     public function indexAction()
     {
         return new ViewModel();
     }
+    
+    /**
+     * busca
+     */
+    public function buscaAction()
+    {
+        $id = $this->params()->fromQuery('id');
+        $descr = $this->params()->fromQuery('descr');
+        if(!$id) {
+            throw new \Exception('Id é obrigatorio!');
+        }
+        $em = $this->getService('Doctrine\ORM\EntityManager');
+        $result = $em->getRepository('Application\Model\TipoAvaliacoes')->findBy(array(
+            'tpaval_id' => $id,
+            'descr' => $descr
+        ));
+        return new ViewModel(array(
+            'result' => $result
+        ));
+    }
+
+    /**
+     * inclusão e alteração
+     */
+    public function includeAction()
+    {
+        
+    }
+    
+    /**
+     * deletar
+     */
+    public function deleteAction()
+    {
+        
+    }
+    
 }
